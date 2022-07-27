@@ -1,0 +1,44 @@
+body {
+    font-family: "Roboto", sans-serif;
+}
+
+.no-products {
+    color: #898789;
+    margin: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0px -1px 17px rgb(0 0 0 / 23%);
+    cursor: pointer;
+    height: 300px;
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+    width: 260px;
+}
+
+.img {
+    width: 200px;
+}
+
+.title-card {
+    color: #898789;
+    font-weight: bold;
+}
+
+.title {
+    padding-left: 20px;
+    color: seagreen;
+}
+
+.link {
+    text-align: end;
+    margin-top: 20px;
+}
