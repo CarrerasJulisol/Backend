@@ -1,0 +1,29 @@
+<%- include('./partials/head') %>
+
+<div class="form-container">
+    <form id="productForm" class="form">
+        <input id="name" name="name" class="complete" placeholder="Nombre"></input>
+        <input id="price" name="price" class="complete" placeholder="Precio"></input>
+        <input type="file" id="image" name="image" class="add-file"></input>
+        <input type="submit" class="boton-ok">
+    </form>
+</div>
+
+<div class="link">
+    <a href="http://localhost:8080/productos">Ver Productos</a>
+</div>
+
+<script>
+    const Form = document.getElementById('productForm');
+
+    Form.addEventListener('submit',evt=>{
+        evt.preventDefault();
+        const formData = new FormData(Form);
+        console.log(formData)
+        fetch('/api/productos',{
+            method:"POST",
+            body:formData,
+        }).then(result=>result.json()).then(json=>console.log(json));
+    })
+    
+</script>

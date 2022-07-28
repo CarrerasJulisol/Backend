@@ -1,0 +1,20 @@
+<%- include('./partials/head') %> 
+
+<h2 class="title">Productos</h2>
+<% if (hasProducts) { %>
+    <div class="grid">
+        <% allProducts.forEach(product => { %>
+            <div class="card">
+                <p class="title-card"><%= product.name %> </p>
+                <p>$<%= product.price %></p>
+                <img src="http://localhost:8080/img/<%= product.image %>" class="img"></img>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <p class="no-products">Ups, aún no hay productos.</p>
+<% } %> 
+
+<div class="link">
+    <a href="http://localhost:8080/agregar">Agregar Productos</a>
+</div>
