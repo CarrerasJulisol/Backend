@@ -1,0 +1,16 @@
+html
+    head
+        link(rel="stylesheet", href="css/style.css")
+    body
+        h2(class="title") Productos
+        if hasProducts
+            div(class="grid")
+                each product in allProducts
+                    div(class="card")
+                        p(class="title-card")=product.name
+                        p=product.price
+                        img(src=`http://localhost:8080/img/${product.image}`, class="img")
+        else 
+            p(class="no-products") Ups, aún no hay productos.
+        div(class="link")
+            a(href="http://localhost:8080/agregar") Agregar Productos

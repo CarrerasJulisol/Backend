@@ -1,0 +1,14 @@
+html
+    head
+        link(rel="stylesheet", href="css/style.css")
+    body
+        h2(class="title") Agregar productos
+        div(class="form-container")
+            form(id="productForm", class="form")
+                input(id="name" name="name" class="complete" placeholder="Nombre")
+                input(id="price" name="price" class="complete" placeholder="Precio")
+                input(type="file" id="image" name="image" class="add-file")
+                input(type="submit" class="boton-ok")
+        div(class="link")
+            a(href="http://localhost:8080/productos") Ver Productos
+        script(src="js/newProduct.js") 
