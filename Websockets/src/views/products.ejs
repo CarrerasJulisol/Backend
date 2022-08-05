@@ -1,0 +1,124 @@
+<%- include('./partials/head') %> 
+
+<div class="modal" id="modal">
+    <form class="box-modal" id="identifier">
+        <h3>Identificate</h3>
+        <p>Ingresa un correo para identificarte en el chat</p>
+        <input type="text" id="email" placeholder="ejemplo@correo.com" required>
+        <input type="submit" class="confirm">
+    </form>
+</div>
+
+<h2 class="title">Agregar productos</h2>
+
+<div class="form-container">
+    <form id="productForm" class="form">
+        <input id="name" name="name" class="complete" placeholder="Nombre"></input>
+        <input id="price" name="price" class="complete" placeholder="Precio"></input>
+        <input type="file" id="image" name="image" class="add-file"></input>
+        <input type="submit" class="boton-ok">
+    </form>
+</div>
+
+<h2 class="title">Productos</h2>
+<% if (hasProducts) { %>
+    <div class="grid" id="grid">
+        <% allProducts.forEach(product => { %>
+            <div class="card" id="card">
+                <p class="title-card"><%= product.name %> </p>
+                <p>$<%= product.price %></p>
+                <img src="http://localhost:8080/img/<%= product.image %>" class="img"></img>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <p class="no-products">Ups, aún no hay productos.</p>
+<% } %>
+
+<h2 class="title">Chat</h2>
+<div class="chat-container">
+    <div id="chat" class="chat-box">
+    </div>
+    <div class="box-chat-container">
+        <span id="identified" class="stlye: margin-left: 20px;"></span>
+        <form id="write-message" class="writing-box">
+            <textarea type="text" name="message" id="message" placeholder="Escribe tu mensaje aqui." class="add-message"></textarea>
+            <input type="submit" class="boton-ok">
+        </form>
+    </div>
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const Form = document.getElementById('productForm');
+    const socket = io();
+    const Identifier = document.getElementById('identifier');
+
+    Identifier.addEventListener('submit', evt=> {
+        evt.preventDefault();
+        const username = document.getElementById('email');
+        user = username.value;
+        console.log(user);
+        document.getElementById('modal').remove();
+        document.getElementById('identified').innerHTML=`Te identificas en el chat como: <span style="font-style: italic">${user}</span>`
+    })
+
+    socket.on('allProducts', data=>{
+        console.log(data)
+        console.log('listo para actualizar')
+        const list = document.getElementById('grid')
+        const allProducts = data.map(element => {
+            return  `<div class="card" id="card">
+                        <p class="title-card">${element.name}</p>
+                        <p>${element.price}</p>
+                        <img src="http://localhost:8080/img/${element.image}" class="img"></img>
+                    </div>`
+        })
+        list.innerHTML = allProducts.join('\n')
+    })
+
+    Form.addEventListener('submit',evt=>{
+        evt.preventDefault();
+        const name = document.getElementById('name');
+        const price = document.getElementById('price');
+        const image = document.getElementById('image');
+        const dividir = image.value.split('\\');
+        const nameFile = (null,Date.now()+"-"+dividir[2]);
+        let product = {
+            name: name.value,
+            price: price.value,
+            image: nameFile
+        };
+        socket.emit('addProduct',product);
+    })
+    
+    const Chat = document.getElementById('write-message');
+
+    Chat.addEventListener('submit',evt=>{
+        evt.preventDefault();
+        const message = document.getElementById('message');
+        let messageContainer = {
+            user: user,
+            date: new Date(Date.now()).toUTCString(),
+            message: message.value
+        };
+        console.log(messageContainer)
+        socket.emit('messages', messageContainer)
+    })
+
+    socket.on("newMessage", data=>{
+        user = data[0].user
+        console.log(user)
+        console.log(data)
+        const box = document.getElementById('chat')
+        const newMessage = data.map(element => {
+            return  `<div>
+                        <span class="user-style">${element.user}</span>
+                        <span class="date-style">${element.date}</span>
+                        <span class="message-style">${element.message}</span>
+                    </div>`
+        })
+        box.innerHTML = newMessage.join('\n')
+    })
+</script>
