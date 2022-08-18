@@ -13,7 +13,7 @@ router.get('/', async (req,res)=>{
 //GET BY ID
 router.get('/:prodID', async (req,res)=>{
     const { params } = req;
-    const getProduct = await products.getByID(params);
+    const getProduct = await products.getByID(params.prodID);
     if (getProduct){
         res.send(getProduct);
     }else{

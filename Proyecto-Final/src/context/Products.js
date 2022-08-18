@@ -15,7 +15,7 @@ class Products {
 
     async getByID(prodID) {
         const content = await this.getAll();
-        const location = content.findIndex(obj => obj.id == prodID)
+        const location = content.findIndex(obj => obj.id = prodID)
         return content[location]
     };
 

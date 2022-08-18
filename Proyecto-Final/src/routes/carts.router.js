@@ -15,8 +15,7 @@ router.get('/', async(req, res)=>{
 // GET CART
 router.get('/:cartID', async(req, res)=>{
     const { params } = req;
-    const getCart = await carts.getCartID(params);
-    const cartProducts = [];
+    const getCart = await carts.getCartID(params.cartID);
     if (getCart){
         res.send(getCart);
     }else{
@@ -36,6 +35,7 @@ router.post('/:cartID/products/:prodID', async (req, res)=>{
     const cartID = req.params.cartID
     const prodID = req.params.prodID
     const { body } = req
+    console.log(prodID)
     //const cart = await carts.getCartID(params.cartID);
     // deberia recibir un numero
     const product = await products.getByID(prodID);

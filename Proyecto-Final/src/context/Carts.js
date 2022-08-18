@@ -19,9 +19,10 @@ class Carts {
 
     async saveCart(){
         const content = await this.getAllCarts();
+        console.log(content)
         console.log(content.length)
         const cart = {
-            id: content.length,
+            id: content.length + 1,
             products: []
         }
         content.push(cart)
@@ -31,21 +32,25 @@ class Carts {
 
     async saveProducts(cartID,product){
         let allCarts = await this.getAllCarts();
+        this.allCarts = allCarts
         const content = await this.getCartID(cartID);
         const exist = content.products.findIndex(obj => obj.id == product.id);
         if (exist !== -1) {
+            console.log("existe")
             content.products[exist].quantity++
             const newArray = allCarts.filter(element=>element.id !== content.id)
             allCarts = newArray
             allCarts.push(content)
             await fs.promises.writeFile(this.file, JSON.stringify(allCarts))
         }else{
+            console.log("no existe")
             const prodContainer = {
                 quantity: 1,
-                id: product.id
+                id: parseInt(product.id)
             }
-            content.products.push(prodContainer);
-            this.allCarts.push(content)
+            content.products = [...content.products, prodContainer]
+            const location = allCarts.findIndex(obj => obj.id == cartID);
+            allCarts[location] = content
             await fs.promises.writeFile(this.file, JSON.stringify(this.allCarts));
         }
         return content;
@@ -60,6 +65,10 @@ class Carts {
     }
 
     async deleteProduct(cartID, prodID){
+        console.log("cartID en delete prod")
+        console.log(cartID)
+        console.log("prodID en delete prod")
+        console.log(prodID)
         const allCarts = await this.getAllCarts();
         const content = await this.getCartID(cartID);
         const cartContent = content.products.filter(element => element.id != prodID);
