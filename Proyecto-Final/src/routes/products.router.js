@@ -24,7 +24,8 @@ router.get('/:prodID', async (req,res)=>{
 router.post('/', async (req, res)=>{
     const { body } = req;
     console.log(body)
-    const save = await products.saveProduct(body);
+    const product = await products.addID(body)
+    const save = await products.save(product);
     res.send({product: save});
 })
 
