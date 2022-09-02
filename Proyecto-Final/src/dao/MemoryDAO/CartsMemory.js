@@ -1,27 +1,35 @@
-import FSContainer from "./FSContainer.js";
+import MemoryContainer from "./MemoryContainer.js";
 
-export default class Carts extends FSContainer{
+export default class Carts extends MemoryContainer{
     constructor(){
-        super(newElement);
+        super();
+        this.carts = []
+    }
+
+    async getAllCarts(){
+        return this.carts
     }
 
     async getCartID(cartID){
-        const content = await this.getAll();
+        const content = await this.getAllCarts();
         return content.find(element => element.id == cartID);
     }
 
     async newCart(){
+        const content = await this.getAllCarts();
         const cart = {
             id: content.length + 1,
             products: []
         }
-        this.save(cart);
+        this.carts.push(cart);
         return cart
     }
 
     async saveProducts(cartID,product){
-        let allCarts = await this.getAll();
+        let allCarts = await this.getAllCarts();
+        console.log(allCarts)
         const content = await this.getCartID(cartID);
+        console.log(content)
         const exist = content.products.findIndex(obj => obj.id == product.id);
         if (exist !== -1) {
             console.log("exist")
@@ -29,7 +37,7 @@ export default class Carts extends FSContainer{
             const newArray = allCarts.filter(element=>element.id !== content.id)
             allCarts = newArray
             allCarts.push(content)
-            await this.data.push(allCarts)
+            this.carts = allCarts
         }else{
             console.log("not exist")
             const prodContainer = {
@@ -37,27 +45,30 @@ export default class Carts extends FSContainer{
                 id: parseInt(product.id)
             }
             content.products = [...content.products, prodContainer]
+            console.log(content)
             const location = allCarts.findIndex(obj => obj.id == cartID);
+            console.log(location)
             allCarts[location] = content
-            await this.data.push(allCarts)
+            console.log(allCarts)
+            this.carts = allCarts
         }
         return content;
     }
 
     async deleteCart(cartID){
-        const content = await this.getAll();
+        const content = await this.getAllCarts();
         const newContent = content.filter(element => element.id != cartID.cartID);
-        await this.data.push(newContent)
+        this.carts = newContent
         return console.log('Carrito eliminado.')
     }
 
     async deleteProduct(cartID, prodID){
-        const allCarts = await this.getAll();
+        const allCarts = await this.getAllCarts();
         const content = await this.getCartID(cartID);
         const cartContent = content.products.filter(element => element.id != prodID);
         content.products = cartContent
         const newArray = allCarts.filter(element=>element.id != cartID)
         newArray.push(content)
-        await this.data.push(newArray)
+        this.carts = newArray
     }
 }

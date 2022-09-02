@@ -2,8 +2,8 @@ import __dirname from "../../utils.js";
 import fs from 'fs';
 
 class FSContainer {
-    constructor(file){
-        this.data = __dirname+`/files/${file}.json`;
+    constructor(){
+        this.data = __dirname+"/files/products.json";
         this.admin = true;
     };
 
@@ -12,9 +12,10 @@ class FSContainer {
         const read = await fs.promises.readFile(this.data, 'utf-8');
         return JSON.parse(read);
     };
-
+    
     async save(newElement){
         if (this.admin) {
+            console.log(newElement)
             const content = await this.getAll();
             content.push(newElement)
             await fs.promises.writeFile(this.data, JSON.stringify(content));
@@ -24,5 +25,7 @@ class FSContainer {
         }
     };
 };
+
+
 
 export default FSContainer;

@@ -1,12 +1,15 @@
 import FSContainer from "./FSContainer.js";
+import fs from 'fs';
 
 export default class Products extends FSContainer{
-    constructor(file){
-        super(newElement);
+    constructor(){
+        super();
     }
 
     async addID(product){
+        console.log(product)
         const content = await this.getAll();
+        console.log(content)
         product.id = content.length + 1;
         product.price = parseInt(product.price);
         return product;
@@ -14,12 +17,14 @@ export default class Products extends FSContainer{
 
     async getByID(prodID) {
         const content = await this.getAll();
-        const location = content.findIndex(obj => obj.id = prodID)
+        const location = content.findIndex(obj => obj.id == prodID)
         return content[location]
     };
 
     async toUpdate(product,update){
         if(this.admin){
+            console.log(product)
+            console.log(update)
             const content = await this.getAll();
             const prodToUpdate = content.find(element=> element.id === product.id);
             if (update.name != undefined){

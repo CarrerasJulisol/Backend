@@ -1,21 +1,19 @@
 import { Router } from "express";
 import __dirname from "../utils.js";
-import Carts from "../context/Carts.js";
-import Products from "../context/Products.js";
+import services from '../dao/config.js';
 
 const router = Router();
-const carts = new Carts;
-const products = new Products;
+
 // GET ALL
 router.get('/', async(req, res)=>{
-    const get = await carts.getAllCarts();
+    const get = await services.CartsServices.getAllCarts();
     res.send(get);
 })
 
 // GET CART
 router.get('/:cartID', async(req, res)=>{
     const { params } = req;
-    const getCart = await carts.getCartID(params.cartID);
+    const getCart = await services.CartsServices.getCartID(params.cartID);
     if (getCart){
         res.send(getCart);
     }else{
@@ -25,8 +23,7 @@ router.get('/:cartID', async(req, res)=>{
 
 // SAVE CART
 router.post('/', async(req, res)=>{
-    const { body } = req
-    const save = await carts.saveCart()
+    const save = await services.CartsServices.newCart()
     res.send({cart: save})
 })
 
@@ -36,17 +33,17 @@ router.post('/:cartID/products/:prodID', async (req, res)=>{
     const prodID = req.params.prodID
     const { body } = req
     console.log(prodID)
-    //const cart = await carts.getCartID(params.cartID);
+    //const cart = await services.CartsServices.getCartID(params.cartID);
     // deberia recibir un numero
-    const product = await products.getByID(prodID);
-    const addProduct = await carts.saveProducts(cartID,product);
+    const product = await services.ProductsServices.getByID(prodID);
+    const addProduct = await services.CartsServices.saveProducts(cartID,product);
     res.send({cart: addProduct})
 })
 
 // DELETE CART
 router.delete('/:cartID', async (req, res)=>{
     const { params } = req;
-    await carts.deleteCart(params);
+    await services.CartsServices.deleteCart(params);
     res.send({message: "Carrito Eliminado"});
 })
 
@@ -54,7 +51,7 @@ router.delete('/:cartID', async (req, res)=>{
 router.delete('/:cartID/products/:prodID', async(req,res)=>{
     let cartID = req.params.cartID;
     let prodID = req.params.prodID;
-    const cart = await carts.deleteProduct(cartID,prodID)
+    const cart = await services.CartsServices.deleteProduct(cartID,prodID)
     res.send({message: "Producto Eliminado"})
 })
 

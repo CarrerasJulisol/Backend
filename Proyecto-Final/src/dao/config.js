@@ -1,6 +1,7 @@
-const persistence = "FileSystem"
+const persistence = "Mongoose"
 
 let ProductsServices;
+let CartsServices;
 
 switch(persistence){
     case "Memory":
@@ -9,23 +10,24 @@ switch(persistence){
         const {default:MemCarts} = await import('./MemoryDAO/CartsMemory.js');
         CartsServices = new MemCarts();
         break;
-    case "MongoDB":
-        const {default:MongoProducts} = await import('./MongoDAO/ProductsMongo.js');
-        ProductsServices = new MongoProducts();
-        const {default:MongoCarts} = await import('./MongoDAO/CartsMongo.js');
-        ProductsServices = new MongoCarts();
+    case "Mongoose":
+        const {default:MongooseProducts} = await import('./MongooseDAO/ProductsMongoose.js');
+        ProductsServices = new MongooseProducts();
+        const {default:MongooseCarts} = await import('./MongooseDAO/CartsMongoose.js');
+        CartsServices = new MongooseCarts();
         break;
     case "FileSystem":
         const {default:FSproducts} = await import('./FileSystemDAO/ProductsFS.js');
-        ProductsServices = new FSproducts('products');
+        ProductsServices = new FSproducts();
         const {default:FScarts} = await import('./FileSystemDAO/CartsFS.js');
-        CartsServices = new FScarts('carts');
+        CartsServices = new FScarts();
         break;
 }
 
 
 const services = {
     ProductsServices,
+    CartsServices
 }
 
 export default services
