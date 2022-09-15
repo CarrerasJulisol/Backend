@@ -8,7 +8,7 @@ const router = Router();
 
 router.use(session({
     store:MongoStore.create({
-        mongoUrl:'mongodb+srv://julieta:12345@proyecto-carreras.appkwcp.mongodb.net/test',
+        mongoUrl:'mongodb+srv://julieta:12345@proyecto-carreras.appkwcp.mongodb.net/usuarios',
         ttl:1000
     }),
     secret:'th3Sess1onS2',

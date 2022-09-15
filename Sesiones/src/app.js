@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 const app = express();
 const PORT = 8080;
 const server = app.listen(PORT,()=>console.log(`Listening on ${server.address().port}`));
-const connection = mongoose.connect('mongodb://127.0.0.1/ecommerce')
+const connection = mongoose.connect('mongodb+srv://julieta:12345@proyecto-carreras.appkwcp.mongodb.net/usuarios')
 const io = new Server(server);
 const File = new Container()
 
