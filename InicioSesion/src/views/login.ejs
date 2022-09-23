@@ -10,6 +10,10 @@
             <input type="submit" class="boton-ok">
         </form>
     </div>
+
+    <div>
+        <button class="boton-ok"><a href="http://localhost:8080/session/register">Registrarme</a></button>
+    </div>
 </div>
 
 <script>
@@ -20,7 +24,7 @@
         let data = new FormData(form);
         let obj = {};
         data.forEach((value,key)=>obj[key]=value);
-        fetch('login',{
+        fetch('/session/login',{
             method:'POST',
             body:JSON.stringify(obj),
             headers:{

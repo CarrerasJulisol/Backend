@@ -14,12 +14,19 @@ const chatSchema = mongoose.Schema({
     message:String
 })
 
+const usersSchema = new mongoose.Schema({
+    name:String,
+    email:String,
+    password:String
+})
+
 // CLASE CONTENEDOR //
 class Container {
     constructor() {
         mongoose.connect('mongodb://127.0.0.1/ecommerce')
         this.modelProd = mongoose.model('products',productsSchema);
         this.modelChat = mongoose.model('chat',chatSchema);
+        //this.modelUsers = mongoose.model('users',usersSchema);
     }
 
     async save(document) {
@@ -119,6 +126,15 @@ class Container {
         const normalizedData = normalize(chatBox,chat);
         return normalizedData
     }*/
+
+    async findMail(email){
+        return this.modelUsers.findOne({email:email})
+    }
+
+    async saveUser(newUser){
+        await this.modelChat.create(newUser)
+        return "save"
+    }
 }
 
 export default Container;

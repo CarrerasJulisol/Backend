@@ -2,11 +2,13 @@ import MongoStore from "connect-mongo";
 import { Router } from "express";
 import __dirname from "../utils.js";
 import { createHash, isValidPassword } from "../utils.js";
-import userService from "../context/users.js";
+import UserService from "../context/users.js";
+import Container from "../context/container.mongoose.js";
 import passport from 'passport';
 import session from "express-session";
 
 const router = Router();
+const services = new UserService()
 
 router.use(session({
     store:MongoStore.create({
@@ -25,27 +27,34 @@ router.get('/register', async (req, res)=> {
 router.post('/register', async (req, res) =>{
     const { name, email, password } = req.body;
     if(!name||!email||!password) return res.status(400).send({status:"error",error:"Valores incompletos"})
-    const exists = await userService.findOne({email:email});
-    if(exists) return res.status(400).send({status:"error",error:"El usuario ya existe!"})
-    const newUser = {
-        name,
-        email,
-        password
+    const exists = await services.find(email)
+    if(exists){
+        return res.status(400).send({status:"error",error:"El usuario ya existe!"})
+    }else{
+        const newUser = {
+            name,
+            email,
+            password:createHash(password)
+        }
+        let result = await services.create(newUser);
+        res.send(result);
     }
-    let result = await userService.create(newUser);
-    res.send(result);
 })
 
 router.post('/login', async (req, res)=>{
     const { email, password } = req.body;
-    if(email === "admin" && password === "admin1"){
-        req.session.user={
-            email,
-            role:"admin"
-        }
-        return res.json({message: "Iniciaste sesion :)"})
+    if(!email||!password){
+        return res.status(400).send({status:"error",error:"Valores incompletos."})
     }else{
-        res.send({message: "Ups, algun dato que ingresaste es incorrecto."})
+        console.log(email)
+        let user = await services.find(email);
+        if (!user) return res.status(400).send({status:"error",error:"Credenciales incorrectas."})
+        if(!isValidPassword(user,password)) return res.status(400).send({status:"error",error:"Contraseña incorrecta."})
+        req.session.user={
+            name:user.name,
+            email:user.email
+        }
+        res.json({status:"success",playload:req.session.user})
     }
 })
 

@@ -12,6 +12,10 @@
             <input type="submit" class="boton-ok">
         </form>
     </div>
+
+    <div>
+        <button class="boton-ok"><a href="http://localhost:8080/session/login">Iniciar sesión</a></button>
+    </div>
 </div>
 
 <script>
@@ -21,13 +25,15 @@
         evt.preventDefault();
         let password = document.getElementById('password');
         let rePassword = document.getElementById('re-password');
-        if (password === rePassword){
+        console.log(password.value)
+        console.log(rePassword.value)
+        if (password.value === rePassword.value){
             password.classList.remove('different');
             rePassword.classList.remove('different');
             let data = new FormData(form);
             let obj = {};
             data.forEach((value,key)=>obj[key]=value);
-            fetch('register',{
+            fetch('/session/register',{
                 method:'POST',
                 body:JSON.stringify(obj),
                 headers:{
