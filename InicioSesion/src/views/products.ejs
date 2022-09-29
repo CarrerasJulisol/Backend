@@ -1,23 +1,22 @@
-<%- include('./partials/head') %> 
-
-<div class="modal" id="modal">
-    <form class="box-modal" id="identifier">
-        <p style="margin: 5px">Ingresa tus datos para identificarte en el chat</p>
-        <div class="identifier-grid">
-            <p>Nombre</p>
-            <input type="text" id="name" placeholder="Nombre" required>
-            <p>Apellido</p>
-            <input type="text" id="lastName" placeholder="Apellido" required>
-            <p>Correo</p>
-            <input type="text" id="email" placeholder="ejemplo@correo.com" required>
-            <p>Edad</p>
-            <input type="number" id="age" placeholder="Edad" required>
-            <p>Alias</p>
-            <input type="text" id="nickname" placeholder="Alias" required>
-        </div>
-        <input type="submit" class="confirm">
-    </form>
-</div>
+<%- include('./partials/head') %>
+<% let data = user %> 
+<% if (!user) { %>
+    <div class="modal" id="modal">
+        <form class="box-modal" id="identifier">
+            <h3>Inicia Sesión</h3>
+            <p style="margin: 5px">Inicia sesión o registrate para poder identificarte en el chat</p>
+            <div class="">
+                <button class="boton-ok"><a href="http://localhost:8080/session/login">Iniciar Sesión</a></button>
+                <button class="boton-ok"><a href="http://localhost:8080/session/register">Registrarme</a></button>
+            </div>
+        </form>
+    </div>
+<% } else { %>
+        <nav class="session-started">
+            <h2 class="welcome">Hola <%= user.name %>.</h2>
+            <button class="close-session"><a href="http://localhost:8080/session/logout" class="black">Cerrar Sesión</a></button>
+        </nav>
+<% } %>
 
 <h2 class="title">Agregar productos</h2>
 
@@ -35,7 +34,7 @@
     <div class="grid" id="grid">
         <% allProducts.forEach(product => { %>
             <div class="card" id="card">
-                <p class="title-card"><%= product.name %> </p>
+                <p class="title-card"><%= product.name %></p>
                 <p>$<%= product.price %></p>
                 <img src="http://localhost:8080/img/<%= product.image %>" class="img"></img>
             </div>
@@ -50,7 +49,8 @@
     <div id="chat" class="chat-box">
     </div>
     <div class="box-chat-container">
-        <span id="identified" class="stlye: margin-left: 20px;"></span>
+        <img src="http://localhost:8080/img/avatar.png" alt="avatar" class="avatar"><span id="identified" class="stlye: margin-left: 20px;"><% if (user) { %>
+         <%= user.email %><% } else { %>identidicate<% } %></span>
         <form id="write-message" class="writing-box">
             <textarea type="text" name="message" id="message" placeholder="Escribe tu mensaje aqui." class="add-message"></textarea>
             <input type="submit" class="boton-ok">
@@ -63,28 +63,7 @@
 <script>
     const Form = document.getElementById('productForm');
     const socket = io();
-    const Identifier = document.getElementById('identifier');
     let author;
-
-    Identifier.addEventListener('submit', evt=> {
-        evt.preventDefault();
-        const name = document.getElementById('name')
-        const lastName = document.getElementById('lastName')
-        const age = document.getElementById('age')
-        const email = document.getElementById('email')
-        const nick = document.getElementById('nickname')
-        const user = {
-            id:email.value,
-            name:name.value,
-            lastName:lastName.value,
-            age:age.value,
-            nick:nick.value,
-            avatar:'http://localhost:8080/img/avatar.png'
-        }
-        author = user
-        document.getElementById('modal').remove();
-        document.getElementById('identified').innerHTML=`Te identificas en el chat como: <span style="font-style: italic">${user.nick}</span>`
-    })
 
     socket.on('allProducts', data=>{
         const list = document.getElementById('grid')
@@ -97,6 +76,7 @@
         })
         list.innerHTML = allProducts.join('\n')
     })
+
     Form.addEventListener('submit',evt=>{
         evt.preventDefault();
         const name = document.getElementById('name');
@@ -123,6 +103,7 @@
         };
         socket.emit('messages', content)
     })
+
     socket.on("newMessage", data=>{
         email = data[0].email
         const box = document.getElementById('chat')

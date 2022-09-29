@@ -1,12 +1,16 @@
 /* style de products */
 body {
     font-family: "Roboto", sans-serif;
-    margin: 20px 0px;
+    margin: 0px 0px;
 }
 
 a {
     text-decoration: none;
     color: aliceblue;
+}
+
+.black {
+    color: black;
 }
 
 /* MODAL*/
@@ -27,7 +31,7 @@ a {
 .box-modal {
     background-color: white;
     width: 50%;
-    height: 50%;
+    height: 25%;
     text-align: center;
 }
 
@@ -46,6 +50,30 @@ a {
 .delete {
     display: none;
 }
+
+.session-started {
+    background-color: seagreen;
+    width: 98.5vw;
+    height: 50px;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    align-items: center;
+    grid-template-rows: 50px;
+}
+.welcome{
+    color: aliceblue;
+    padding: 0 25px;
+}
+
+.close-session {
+    background: aquamarine;
+    border: none;
+    border-radius: .25rem;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0 25;
+}
+/* PRODUCTS */
 
 .no-products {
     color: #898789;
@@ -143,7 +171,7 @@ a {
 
 .chat-box {
     height: 300px;
-    width: 96vw;
+    width: 94vw;
     border-bottom: solid 1px lightslategray;
     overflow-y: scroll;
     margin: 10px 0;

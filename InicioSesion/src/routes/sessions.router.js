@@ -1,33 +1,20 @@
-import MongoStore from "connect-mongo";
 import { Router } from "express";
 import __dirname from "../utils.js";
 import { createHash, isValidPassword } from "../utils.js";
 import UserService from "../context/users.js";
-import Container from "../context/container.mongoose.js";
 import passport from 'passport';
-import session from "express-session";
 
 const router = Router();
 const services = new UserService()
 
-router.use(session({
-    store:MongoStore.create({
-        mongoUrl:'mongodb+srv://julieta:12345@proyecto-carreras.appkwcp.mongodb.net/usuarios',
-        ttl:1000
-    }),
-    secret:'th3Sess1onS2',
-    resave:false,
-    saveUninitialized:false
-}))
-
-router.get('/register', async (req, res)=> {
+router.get('/register', (req, res)=> {
     res.render('register')
 })
 
-router.post('/register', async (req, res) =>{
+router.post('/register',passport.authenticate('register',{failureRedirect:'/session/registerfail'}),async (req, res) =>{
     const { name, email, password } = req.body;
     if(!name||!email||!password) return res.status(400).send({status:"error",error:"Valores incompletos"})
-    const exists = await services.find(email)
+    const exists = await services.findEmail(email)
     if(exists){
         return res.status(400).send({status:"error",error:"El usuario ya existe!"})
     }else{
@@ -36,30 +23,39 @@ router.post('/register', async (req, res) =>{
             email,
             password:createHash(password)
         }
-        let result = await services.create(newUser);
+        let result = await services.createUser(newUser);
         res.send(result);
     }
 })
 
-router.post('/login', async (req, res)=>{
+router.get('/registerfail', (req,res)=>{
+    res.status(500).send({status:"error",error:"Algo salió mal."})
+})
+
+router.post('/login',passport.authenticate('login',{failureRedirect:'/session/loginfail'}),async (req, res)=>{
     const { email, password } = req.body;
     if(!email||!password){
         return res.status(400).send({status:"error",error:"Valores incompletos."})
     }else{
         console.log(email)
-        let user = await services.find(email);
+        let user = await services.findEmail(email);
         if (!user) return res.status(400).send({status:"error",error:"Credenciales incorrectas."})
         if(!isValidPassword(user,password)) return res.status(400).send({status:"error",error:"Contraseña incorrecta."})
         req.session.user={
-            name:user.name,
-            email:user.email
+            name:req.user.name,
+            email:req.user.email,
+            id:req.user._id
         }
         res.json({status:"success",playload:req.session.user})
     }
 })
 
-router.get('/login', async (req, res)=> {
+router.get('/login',(req, res)=> {
     res.render('login')
+})
+
+router.get('/loginfail',(req, res) =>{
+    res.status(500).send({status:"error",error:"Error al intentar iniciar sesión."});
 })
 
 router.get('/logout', async (req, res)=> {

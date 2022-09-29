@@ -10,7 +10,7 @@ router.get('/', async (req, res)=> {
     res.render('products',{
         hasProducts:allProducts.length>0,
         allProducts,
-        user:null
+        user: req.session.user
     });
 })
 
