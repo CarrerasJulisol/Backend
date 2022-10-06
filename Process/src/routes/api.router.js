@@ -25,7 +25,7 @@ router.get('/products-test', async (req, res)=>{
 router.get('/randoms', (req, res)=>{
     const cant = req.query.cant || ( 100 * 1000 * 1000 )
     const child = fork(__dirname+'/utils/operation.js')
-    child.send(cant)
+    child.send(parseInt(cant))
     child.on('message',(result)=> {
         res.json({
             result: result

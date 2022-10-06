@@ -1,17 +1,21 @@
 function calculateNumbers(cant) {
+    console.log(cant)
     const between = () => Math.floor(Math.random() * 1000);
-    let result;
+    let result = []
+
     for (let i = 0; i < cant; i++) {
         const value = between();
-        if(result[value])
+        if(result[value]){
             result[value] = result[value]+1;
-        else
+        }else{
             result[value] = 1;
+        }
     }
     return result
 }
 
 process.on('message',(cant)=> {
+    console.log(cant)
     let data = calculateNumbers(cant)
     process.send(data);
 });
