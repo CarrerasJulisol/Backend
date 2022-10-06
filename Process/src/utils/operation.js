@@ -1,5 +1,5 @@
 function calculateNumbers(cant) {
-    const between = () => Math.floor(Math.random() * (1000 - 1) + 1000);
+    const between = () => Math.floor(Math.random() * 1000);
     let result;
     for (let i = 0; i < cant; i++) {
         const value = between();
