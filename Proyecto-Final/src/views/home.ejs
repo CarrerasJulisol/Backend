@@ -1,0 +1,34 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Home</title>
+</head>
+
+<header>
+    <nav style="background-color:green;">
+        <p>Menu</p>
+        <ul>
+            <li>Productos</li>
+            <li>Carrito</li>
+            <% if (session) { %>
+                <li><a href="http://127.0.0.1:8080/account/logout">Cerrar Sesión</a></li>
+            <% } else { %>
+                <li><a href="http://127.0.0.1:8080/account/login">Iniciar Sesion</a></li>
+            <% } %> 
+        </ul>
+    </nav>
+</header>
+
+<% if (session) { %>
+ <h1>Bienvenido <%= session.name %></h1>
+<% } else { %>
+    <h1> Inicia sesion o registrate para una mejor experiencia</h1>
+    <div>  
+        <button><a href="http://localhost:8080/account/login">Iniciar Sesion</a></button>
+        <button><a href="http://127.0.0.1:8080/account/register">Registrarme</a></button>
+    </div>
+<% } %>
+ 
+ 

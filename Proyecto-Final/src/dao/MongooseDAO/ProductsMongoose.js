@@ -26,6 +26,11 @@ export default class Products extends MongooseContainer{
         return content
     };
 
+    async getByName(prodName) {
+        const content = await this.model.findOne({name:prodName})
+        return content
+    }
+
     async toUpdate(product,update){
         if(this.admin){
             if (update.name != undefined){

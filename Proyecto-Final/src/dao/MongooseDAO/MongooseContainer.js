@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 class MongooseContainer {
     constructor(collection,schema){
-        mongoose.connect('mongodb://127.0.0.1/ecommerce')
+        mongoose.connect('mongodb+srv://julieta:12345@proyecto-carreras.appkwcp.mongodb.net/Base001?retryWrites=true&w=majority')
         this.model = mongoose.model(collection,schema);
         this.admin = true;
     }
