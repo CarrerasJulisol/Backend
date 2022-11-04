@@ -7,7 +7,8 @@ import MongoStore from "connect-mongo";
 import viewProducts from "./routes/products.router.js";
 import viewCarts from "./routes/carts.router.js";
 import viewHome from "./routes/home.router.js";
-import viewSignIn from "./routes/signin.router.js"
+import viewSignIn from "./routes/signin.router.js";
+import myCart from "./routes/myCart.router.js";
 
 const app = express();
 let PORT = process.env.PORT||8080;
@@ -16,7 +17,7 @@ const server = app.listen(PORT, ()=> console.log(`Server listening on ${PORT}`))
 app.set('views',__dirname+'/views');
 app.set('view engine','ejs');
 app.use(express.json());
-app.use(express.static(__dirname+'public'))
+app.use(express.static(__dirname+'/public'))
 app.use(express.urlencoded({extended: true}))
 app.use(session({
     store:MongoStore.create({
@@ -35,3 +36,4 @@ app.use('/home',viewHome);
 app.use('/api/products', viewProducts);
 app.use('/api/carts', viewCarts);
 app.use('/account',viewSignIn);
+app.use('/mycart',myCart);

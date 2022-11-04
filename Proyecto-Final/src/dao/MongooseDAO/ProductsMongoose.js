@@ -6,7 +6,9 @@ const productsSchema = mongoose.Schema({
     name:String,
     price:Number,
     image:String,
-    stock:Number
+    stock:Number,
+    category:String,
+    subCategory:String
 })
 
 export default class Products extends MongooseContainer{
@@ -25,6 +27,10 @@ export default class Products extends MongooseContainer{
         const content = await this.model.findOne({_id:prodID})
         return content
     };
+
+    async getInfo(list){
+        return this.model.find({_id:list})
+    }
 
     async getByName(prodName) {
         const content = await this.model.findOne({name:prodName})

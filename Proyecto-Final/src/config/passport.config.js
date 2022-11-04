@@ -1,10 +1,11 @@
 import passport from "passport";
 import local from 'passport-local';
 import services from "../dao/config.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, uploader } from "../utils.js";
 
 const LocalStrategy = local.Strategy;
 const service = services;
+//const Uploader = uploader
 
 const initializePassport = () =>{
     passport.use('register',new LocalStrategy({passReqToCallback:true,usernameField:"email"},
@@ -29,6 +30,7 @@ const initializePassport = () =>{
                 address:address,
                 birthday,
                 phone,
+                //image:req.file.filename,
                 role:"client"
             }
             let result = await service.UserServices.createUser(newUser);
@@ -41,7 +43,7 @@ const initializePassport = () =>{
     passport.use('login',new LocalStrategy({usernameField:'email'},async(email, password, done)=>{
         if(!email||!password) return done(null,false,{message:"Valores incompletos"});
         let user = await service.UserServices.findEmail(email);
-        if(!user) return done(null,false,{message:"El usuario no existe"});
+        if(!user||!"admin") return done(null,false,{message:"El usuario no existe"});
         if(!isValidPassword(user, password)) return done(null,false,{message:"La contraseña es incorrecta."});
         return done(null,user);
     }))

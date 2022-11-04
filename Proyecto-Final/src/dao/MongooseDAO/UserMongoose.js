@@ -21,14 +21,19 @@ export default class UserService extends MongooseContainer{
     }
 
     async findEmail(email){
-        return this.model.findOne({email:email})
+        return this.model.findOne({email:email});
     }
 
     async createUser(newA){
-        return this.model.create(newA)
+        return this.model.create(newA);
     }
 
     async findID(id){
-        return this.model.findOne({_id:id})
+        return this.model.findOne({_id:id});
     }
+
+    async createCart(userID,cartID){
+        return this.model.updateOne({_id:userID},{$set:{cart:cartID}});
+    }
+
 }

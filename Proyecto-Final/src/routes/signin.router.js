@@ -2,10 +2,15 @@ import { Router } from "express";
 import __dirname from "../utils.js";
 import Services from "../dao/config.js";
 import passport from 'passport';
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, uploader } from "../utils.js";
 
 const router = Router();
 const services = Services;
+const admin = {
+    name:"admin",
+    email:"admin@correo.com",
+    password:"admin1"
+}
 
 // LOGIN
 router.post('/login',passport.authenticate('login',{failureRedirect:'/account/loginfail'}),async (req, res)=>{
@@ -13,10 +18,10 @@ router.post('/login',passport.authenticate('login',{failureRedirect:'/account/lo
     if(!email||!password){
         return res.status(400).send({status:"error",error:"Valores incompletos."})
     }
-    if(email === "admin" && password === "admin1"){
-        req.session.user={
-            name:"admin",
-            email,
+    if((email==admin.email)&(password==admin.password)){
+        req.session.user = {
+            name:admin.name,
+            email:admin.email,
             role:"admin"
         }
         return res.status(200).send({message: "Iniciaste sesion como administrador"}).redirect('http://localhost:8080/home')
@@ -54,8 +59,8 @@ router.get('/register', (req, res)=> {
     res.render('register')
 })
 
-router.post('/register',passport.authenticate('register',{failureRedirect:'/account/registerfail'}),async(req, res)=>{
-    const { name, lastName, email, password, street, houseAdd, city, birthday, phone } = req.body;
+router.post('/register',/*uploader.single('image'),*/passport.authenticate('register',{failureRedirect:'/account/registerfail'}),async(req, res)=>{
+    const { name, lastName, email, password, street, houseAdd, city, birthday, phone, image } = req.body;
     const address = {
         street:street,
         houseAdd:houseAdd,
@@ -78,15 +83,27 @@ router.post('/register',passport.authenticate('register',{failureRedirect:'/acco
             address:address,
             birthday,
             phone,
+            //image:req.file.filename,
             role:"client"
         }
         await services.UserServices.createUser(newUser);
+        let user = await services.UserServices.findEmail(email);
+        await services.CartsServices.newCart(user.id)
+        console.log("listo")
         res.send({status:200,message:"Usuario creado con éxito"}).redirect('http://localhost:8080/home');
     }
 })
 
 router.get('/registerfail', (req,res)=>{
     res.status(500).send({status:"error",error:"Algo salió mal."})
+})
+
+router.get('/current', async (req, res)=> {
+    if(req.session.user){
+        res.send(req.session.user);
+    }else{
+        res.send("Inicia sesion primero!")
+    }
 })
 
 export default router;

@@ -11,8 +11,8 @@
         <p>Menu</p>
         <ul>
             <li>Productos</li>
-            <li>Carrito</li>
-            <% if (session) { %>
+            <% if (Session) { %>
+                <li><a href="http://127.0.0.1:8080/myCart">Mi carrito</a></li>
                 <li><a href="http://127.0.0.1:8080/account/logout">Cerrar Sesión</a></li>
             <% } else { %>
                 <li><a href="http://127.0.0.1:8080/account/login">Iniciar Sesion</a></li>
@@ -21,8 +21,13 @@
     </nav>
 </header>
 
-<% if (session) { %>
- <h1>Bienvenido <%= session.name %></h1>
+<% if (Session) { %>
+ <h1>Bienvenido <%= Session.name %></h1>
+ <% if (Session.image) { %>
+    <img src="http://localhost:8080/img/<%= Session.image %>" alt="">
+ <% } else { %>
+    <img src="http://localhost:8080/img/default.png" alt="imagen de perfil" class="">
+ <% } %>
 <% } else { %>
     <h1> Inicia sesion o registrate para una mejor experiencia</h1>
     <div>  
@@ -30,5 +35,49 @@
         <button><a href="http://127.0.0.1:8080/account/register">Registrarme</a></button>
     </div>
 <% } %>
- 
- 
+
+<h2 class="title">Productos</h2>
+<% if (hasProducts) { %>
+    <div class="grid">
+        <% allProducts.forEach(product => { %>
+            <div class="card">
+                <p class="title-card"><%= product.name %> </p>
+                <p>$<%= product.price %></p>
+                <img src="http://localhost:8080/img/<%= product.image %>" class="img"></img>
+                <button class="addToCart" id="<%= product.id %>" onclick="getID(this.id)">Agregar al carrito</button>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <p class="no-products">Ups, aún no hay productos.</p>
+<% } %> 
+
+<% if (Session) { %>
+    <div class="link">
+        <a href="http://localhost:8080/agregar">Agregar Productos</a>
+    </div>
+<% } %>
+
+<script>
+    const list = [];
+
+    function getID(valor){
+        const exist = list.findIndex(Element => Element.id === valor)
+        const product = {
+            id:valor,
+            quantity:1
+        }
+        if(exist === -1){
+            list.push(product);
+        }else{
+            list[exist].quantity++
+        }
+        fetch('/myCart',{
+            method:"POST",
+            body:JSON.stringify(list),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
+    }
+</script>
