@@ -1,23 +1,9 @@
-import mongoose from 'mongoose';
 import MongooseContainer from './MongooseContainer.js';
-
-const collection = "users";
-
-const usersSchema = new mongoose.Schema({
-    name:String,
-    lastName:String,
-    email:Object,
-    password:String,
-    address:Object,
-    birthday:String,
-    age:Number,
-    phone:Number,
-    role:String
-})
+import userModel from './models/users.schema.js';
 
 export default class UserService extends MongooseContainer{
     constructor(){
-        super(collection,usersSchema);
+        super(userModel);
     }
 
     async findEmail(email){
@@ -32,8 +18,7 @@ export default class UserService extends MongooseContainer{
         return this.model.findOne({_id:id});
     }
 
-    async createCart(userID,cartID){
-        return this.model.updateOne({_id:userID},{$set:{cart:cartID}});
+    async addCartID(userID,cartID){
+        return this.model.findByIdAndUpdate({_id:userID},{$set:{cartID:cartID}})
     }
-
 }

@@ -44,7 +44,10 @@
                 headers:{
                     "Content-Type":"application/json"
                 }
-            }).then(result=>result.json()).then(json=>console.log(json));
+            }).then(result=>result.json()).then(json=>{
+                console.log(json)
+                window.location.replace('/account/login');
+            });
         }else{
             password.classList.add('different');
             rePassword.classList.add('different');

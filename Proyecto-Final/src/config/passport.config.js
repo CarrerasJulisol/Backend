@@ -31,9 +31,12 @@ const initializePassport = () =>{
                 birthday,
                 phone,
                 //image:req.file.filename,
-                role:"client"
+                role:'user'
             }
             let result = await service.UserServices.createUser(newUser);
+            let user = await services.UserServices.findEmail(email);
+            let cart = await services.CartsServices.newCart(user._id)
+            await services.UserServices.addCartID(user._id,cart._id)
             return done(null,result)
         }catch(error){
             done(error)

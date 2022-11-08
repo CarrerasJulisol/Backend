@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import config from '../../config/config.js';
 
 class MongooseContainer {
-    constructor(collection,schema){
-        mongoose.connect('mongodb+srv://julieta:12345@proyecto-carreras.appkwcp.mongodb.net/Base001?retryWrites=true&w=majority')
-        this.model = mongoose.model(collection,schema);
+    constructor(model){
+        mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PWD}@proyecto-carreras.appkwcp.mongodb.net/${config.mongo.DB}`)
+        this.model = model;
         this.admin = true;
     }
 

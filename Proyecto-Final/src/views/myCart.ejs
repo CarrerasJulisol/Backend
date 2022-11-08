@@ -1,35 +1,40 @@
-<button><a href="http://127.0.0.1:8080/home">Ir a Inicio</a></button>
-<% if (cart) { %>
-    <% if (addedProducts) { %>
+<%- include('./partials/head') %>
+    <% if (addedProducts.length>0) { %>
+        <div class="grid-cart">
+            <div>Producto</div>
+                <div>Precio</div>
+                <div>Cantidad</div>
+                <div></div>
+                <div></div>
             <% addedProducts.forEach(product => { %>
-                <p><%= product.name %></p>
-                <p>$<%= product.price %></p>
-                <p>cantidad:--</p>
-                <p><img src="http://localhost:8080/img/<%= product.image %>" class="img"></img></p>
+                <div><%= product.name %></div>
+                <div>$<%= product.price %></div>
+                <div>cantidad:--</div>
+                <div><img src="http://localhost:8080/img/<%= product.image %>" class="img-cart"></img></div>
                 <button class="remove" id="<%= product.id %>" onclick="getID(this.id)">x</button>
                 <% }) %>
-        <% } else { %>
-            <p>Tu carrito esta vacio.</p>
-        <% } %>
-<% } else { %>
-    <div>
-        <p>No existe un carrito.</p>
-    </div>     
-<% } %>
+            <% } else { %>
+                <p>Tu carrito esta vacio.</p>
+            <% } %>
+        </div>
+        
+        <button class="boton-ok"><a href="http://127.0.0.1:8080/home">Ir a Inicio</a></button>
 
 <script>
-    const toRemove = ["remove"];
+    const toRemove = [];
 
     function getID(valor){
-        console.log(`Eliminado producto con id:${valor}`);
         toRemove.push(valor);
-        console.log(toRemove);
+        console.log(`Eliminar producto con id:${valor}`);
         fetch('/myCart',{
             method:"POST",
             body:JSON.stringify(toRemove),
             headers:{
                 "Content-Type": "application/json"
             }
-        })
+        }).then(result=>result.json()).then(json=>{
+                console.log(json)
+                window.location.replace('/myCart');
+            })
     }
 </script>

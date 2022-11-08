@@ -1,17 +1,11 @@
 import { Router } from "express";
-import services from '../dao/config.js';
+import cartsController from "../controllers/carts.controller.js";
+import viewsController from "../controllers/views.controller.js";
+import { publicValidation, privateValidation } from "../middlewares/auth.js";
 
 const router = new Router();
 
-router.get('/',async(req,res)=>{
-    //hay una sesion iniciada?
-    let Session = req.session.user
-    const allProducts = await services.ProductsServices.getAll()
-    res.render('home',{
-        Session,
-        hasProducts:allProducts.length>0,
-        allProducts
-    });
-})
+router.get('/',privateValidation,viewsController.viewProducts);
+router.post('/',privateValidation,cartsController.saveAtCart);
 
 export default router;

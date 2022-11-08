@@ -7,13 +7,17 @@
 </head>
 
 <header>
-    <nav style="background-color:green;">
-        <p>Menu</p>
-        <ul>
-            <li>Productos</li>
-            <% if (Session) { %>
+    <nav class="elnav">
+        <ul class="menu-style">
+            <li><a href="#products">Productos</a></li>
+            <% if (user) { %>
                 <li><a href="http://127.0.0.1:8080/myCart">Mi carrito</a></li>
-                <li><a href="http://127.0.0.1:8080/account/logout">Cerrar Sesión</a></li>
+                <li style="display: flex; align-items: center;"><% if (user.image) { %>
+                    <img src="http://localhost:8080/img/<%= user.image %>" alt="">
+                 <% } else { %>
+                    <img src="http://localhost:8080/img/default.png" alt="imagen de perfil" class="img-icon ">
+                 <% } %>
+                 <a href="http://127.0.0.1:8080/account/logout">Cerrar Sesión</a></li>
             <% } else { %>
                 <li><a href="http://127.0.0.1:8080/account/login">Iniciar Sesion</a></li>
             <% } %> 
@@ -21,24 +25,19 @@
     </nav>
 </header>
 
-<% if (Session) { %>
- <h1>Bienvenido <%= Session.name %></h1>
- <% if (Session.image) { %>
-    <img src="http://localhost:8080/img/<%= Session.image %>" alt="">
- <% } else { %>
-    <img src="http://localhost:8080/img/default.png" alt="imagen de perfil" class="">
- <% } %>
+<% if (user) { %>
+ <h1 style="text-align: center">Bienvenido <%= user.name %></h1>
 <% } else { %>
     <h1> Inicia sesion o registrate para una mejor experiencia</h1>
     <div>  
-        <button><a href="http://localhost:8080/account/login">Iniciar Sesion</a></button>
-        <button><a href="http://127.0.0.1:8080/account/register">Registrarme</a></button>
+        <button><a href="http://localhost:8080/account/login" class="boton-ok">Iniciar Sesion</a></button>
+        <button><a href="http://127.0.0.1:8080/account/register" class="boton-ok">Registrarme</a></button>
     </div>
 <% } %>
 
 <h2 class="title">Productos</h2>
 <% if (hasProducts) { %>
-    <div class="grid">
+    <div class="grid" id="products">
         <% allProducts.forEach(product => { %>
             <div class="card">
                 <p class="title-card"><%= product.name %> </p>
@@ -52,7 +51,7 @@
     <p class="no-products">Ups, aún no hay productos.</p>
 <% } %> 
 
-<% if (Session) { %>
+<% if (user.role==="admin") { %>
     <div class="link">
         <a href="http://localhost:8080/agregar">Agregar Productos</a>
     </div>
@@ -60,19 +59,18 @@
 
 <script>
     const list = [];
-
     function getID(valor){
-        const exist = list.findIndex(Element => Element.id === valor)
-        const product = {
-            id:valor,
+        const exist = list.findIndex(Element => Element.product === valor)
+        const prod = {
+            product:valor,
             quantity:1
         }
         if(exist === -1){
-            list.push(product);
+            list.push(prod);
         }else{
             list[exist].quantity++
         }
-        fetch('/myCart',{
+        fetch('/home',{
             method:"POST",
             body:JSON.stringify(list),
             headers:{
