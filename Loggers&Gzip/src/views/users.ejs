@@ -1,0 +1,17 @@
+<h1>Usuarios</h1>
+<% if (users.length>0) { %>
+    <div>
+        <% users.forEach(user => { %>
+            <ul>
+                <li>Nombre: <%= user.name %></li>
+                <li>Apellido: <%= user.lastName %></li>
+                <li>Edad: <%= user.age %></li>
+                <li>Email: <%= user.email %></li>
+            </ul>  
+        <% }) %>
+    </div>
+<% } else { %>
+     <div>
+        "No hay usuarios guardados"
+     </div>
+<% } %>

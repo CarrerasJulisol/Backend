@@ -20,6 +20,11 @@ export default {
     app:{
         MODE:process.env.MODE || 'FORK',
         PORT:process.env.PORT || 8080,
-        DEBUG:process.env.DEBUG || false
+        DEBUG:process.env.DEBUG || false,
+    },
+    mongo:{
+        USER:process.env.MONGO_USER,
+        PWD:process.env.MONGO_PWD,
+        DB:process.env.MONGO_DATABASE,
     }
 }

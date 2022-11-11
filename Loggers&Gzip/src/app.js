@@ -2,7 +2,7 @@ import express from 'express';
 import winston from 'winston';
 import __dirname from '../src/utils.js';
 import infoRouter from './routes/info.router.js';
-import randomsRouter from './routes/randoms.router.js'
+import usersRouter from './routes/user.router.js';
 
 const app = express();
 const logger = winston.createLogger({
@@ -37,4 +37,4 @@ app.get('/',(req,res)=>{
 });
 
 app.use('/info',infoRouter);
-app.use('/randoms',randomsRouter);
+app.use('/users',usersRouter);
