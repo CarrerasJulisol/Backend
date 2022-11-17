@@ -1,7 +1,9 @@
 import { userService } from "../services/index.js";
+import { UserDTO } from "../dao/dto/user.dto.js";
 
 const viewUsers = async (req,res) =>{
-    const users = await userService.getUsers()
+    const result = await userService.getUsers()
+    const users = result.map(user=>new UserDTO(user));
     console.log(users)
     res.render("users",{
         users

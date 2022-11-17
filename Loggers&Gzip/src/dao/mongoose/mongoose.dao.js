@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import User from "../mongoose/models/user.model.js";
-// (me sale error al importar este config)
-import config from ".../config/config.js";
+import config from "../../config/config.js";
 
 export default class MongooseDao {
     constructor(model){

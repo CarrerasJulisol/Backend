@@ -21,6 +21,7 @@ export default {
         MODE:process.env.MODE || 'FORK',
         PORT:process.env.PORT || 8080,
         DEBUG:process.env.DEBUG || false,
+        PERSISTENCE:process.env.PERSISTENCE || "MEMORY"
     },
     mongo:{
         USER:process.env.MONGO_USER,
