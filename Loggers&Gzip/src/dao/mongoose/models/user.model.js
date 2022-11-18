@@ -1,6 +1,6 @@
 export default class User {
     static get model(){
-        return 'Users';
+        return 'User';
     }
     static get schema(){
         return {

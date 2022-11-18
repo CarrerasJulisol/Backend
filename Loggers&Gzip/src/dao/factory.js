@@ -1,6 +1,6 @@
-import config from "../config/config.js"
+import config from "../config/config.js";
 
-const PERSISTENCE = "MONGOOSE" || config.app.PERSISTENCE
+const PERSISTENCE = config.app.PERSISTENCE
 
 export default class PersistenceFactory {
     static getPersistence = async() => {

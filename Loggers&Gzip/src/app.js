@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/',(req,res)=>{
     try {
         logger.log('info', `Fecha y Hora:${today.toUTCString()}. Método: GET. URL: http://localhost:8080`)
-        logger.log('warn', "atencion en primer get")
+        //logger.log('warn', "atencion en primer get")
         res.send(`El proceso con pid ${process.pid} atendió esta consulta en ${PORT}`)
     }catch(error){
         logger.log('error', `Hubo un error: ${error}`)

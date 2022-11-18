@@ -1,8 +1,8 @@
 export default class MemoryDao {
     constructor(){
         this.entities = {
-            users:[],
-            products:[]
+            User:[],
+            Product:[]
         }
     }
     
@@ -19,7 +19,6 @@ export default class MemoryDao {
 
     async save(element,entity){
         this.isValidEntity(entity);
-        console.log("element",element,"entity",entity)
         if(this.entities[entity].length===0){
             element.id = 1
         }else{

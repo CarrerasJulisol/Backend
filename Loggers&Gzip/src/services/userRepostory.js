@@ -1,12 +1,12 @@
-import PersistenceFactory from "../dao/factory";
+import PersistenceFactory from "../dao/factory.js";
 
 export default class UserRepository {
     constructor(dao) {
         this.dao;
-        this.entity = 'users';
+        this.entity = 'User';
     }
 
-    init = async()=>{
+    async init() {
         const {services} = await PersistenceFactory.getPersistence();
         this.dao = services
     }

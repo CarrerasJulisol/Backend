@@ -4,3 +4,4 @@
 {"level":"error","message":"Hubo un error: ReferenceError: os is not defined"}
 {"level":"error","message":"Hubo un error: ReferenceError: os is not defined"}
 {"level":"error","message":"Hubo un error: ReferenceError: os is not defined"}
+{"level":"warn","message":"atencion en primer get"}

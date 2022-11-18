@@ -1,10 +1,12 @@
-import { userRepository } from "../services/index.js";
+import UserRepository from "../services/userRepostory.js";
 import { UserDTO } from "../dao/dto/user.dto.js";
 
+const service = new UserRepository()
+
 const viewUsers = async (req,res) =>{
-    const result = await userRepository.getUsers()
+    await service.init()
+    const result = await service.getUsers()
     const users = result.map(user=>new UserDTO(user));
-    console.log(users)
     res.render("users",{
         users
     })
@@ -19,9 +21,7 @@ const createUser = async (req,res) =>{
             age,
             email
         }
-        console.log(data)
-        const user = await userRepository.saveUser(data)
-        console.log(user)
+        const user = await service.saveUser(data)
         res.send({message: "usuario creado"})
     } catch (error) {
         res.send(error)

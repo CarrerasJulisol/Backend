@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 import User from "../mongoose/models/user.model.js";
+import Product from "../mongoose/models/Product.model.js";
 import config from "../../config/config.js";
 
 export default class MongooseDao {
-    constructor(model){
-        this.mongoose = mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PWD}@proyecto-carreras.appkwcp.mongodb.net/${config.mongo.DB}`)
+    constructor(){
+        mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PWD}@proyecto-carreras.appkwcp.mongodb.net/${config.mongo.DB}`)
         const userSchema = mongoose.Schema(User.schema);
+        const productSchema = mongoose.Schema(Product.schema);
         this.models = {
-            [User.model] : mongoose.model(User.model,userSchema)
+            [User.model] : mongoose.model(User.model,userSchema),
+            [Product.model] : mongoose.model(Product.model,productSchema)
         }
     }
     
@@ -18,13 +21,12 @@ export default class MongooseDao {
     }
 
     async getAll(entity){
-        this.isValidEntity(entity)
-        return this.model[entity].find()
+        this.isValidModel(entity)
+        return this.models[entity].find()
     }
 
     async save(element,entity){
-        console.log("element",element)
-        this.isValidEntity(entity)
-        return this.model[entity].create(element)
+        this.isValidModel(entity)
+        return this.models[entity].create(element)
     }
 }
