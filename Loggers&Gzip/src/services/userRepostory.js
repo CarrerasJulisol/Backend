@@ -1,6 +1,6 @@
 import PersistenceFactory from "../dao/factory";
 
-export default class UserService {
+export default class UserRepository {
     constructor(dao) {
         this.dao;
         this.entity = 'users';
