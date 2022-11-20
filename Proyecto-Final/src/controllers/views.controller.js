@@ -6,8 +6,6 @@ const viewProducts = async(req,res)=>{
     //hay una sesion iniciada?
     const user = jwt.verify(req.cookies[config.jwt.COOKIE],config.jwt.SECRET);
     let Session = req.user.id
-    console.log("en home session",Session)
-    console.log("en home user",user)
     const allProducts = await services.ProductsServices.getAll()
     res.render('home',{
         user,

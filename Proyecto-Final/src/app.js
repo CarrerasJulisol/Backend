@@ -1,4 +1,5 @@
 import express from "express";
+import winston from "winston";
 import __dirname from "./utils.js";
 import config from "./config/config.js";
 import initializePassport from "./config/passport.config.js";
@@ -13,6 +14,13 @@ import cookieParser from 'cookie-parser';
 const app = express();
 let PORT = process.env.PORT||8080;
 const server = app.listen(PORT, ()=> console.log(`Server listening on ${PORT}`));
+const logger = winston.createLogger({
+    transports:[
+        new winston.transports.Console({level:'info'}),
+        new winston.transports.Console({level:'warn'}),
+        new winston.transports.Console({level:'error'})
+    ]
+})
 
 app.set('views',__dirname+'/views');
 app.set('view engine','ejs');

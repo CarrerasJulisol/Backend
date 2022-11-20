@@ -1,6 +1,14 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
+import winston from 'winston';
 
+const logger = winston.createLogger({
+    transports:[
+        new winston.transports.Console({level:'info'}),
+        new winston.transports.Console({level:'warn'}),
+        new winston.transports.File({level:'error',filename:'errors.log'})
+    ]
+})
 
 export const publicValidation = (req,res,next) =>{
     try{
@@ -8,7 +16,7 @@ export const publicValidation = (req,res,next) =>{
         if(token) return res.redirect('/home');
         else next();
     }catch(error){
-        console.log(error);
+        logger.log('error',error)
         next();
     }
 }

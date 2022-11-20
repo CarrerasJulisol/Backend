@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import config from '../../config/config.js';
+import { normalize, schema } from 'normalizr';
 
 class MongooseContainer {
     constructor(model){
@@ -14,6 +15,13 @@ class MongooseContainer {
 
     async save(document){
         return this.model.create(document);
+    }
+
+    async getNormalizr(entity){
+        const data = await this.getAll();
+        let schemaEntity = new schema.Entity(entity)
+        const normalizedData = normalize(data,schemaEntity);
+        return normalizedData
     }
 }
 
