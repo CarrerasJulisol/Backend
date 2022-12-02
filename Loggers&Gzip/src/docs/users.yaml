@@ -1,0 +1,88 @@
+components:
+  requestBodies:
+    nuevoUsuario:
+      type: Object
+      properties:
+        name:
+          type: String
+          description: Nombre(s) del usuario
+        lastName:
+          type: String
+          description: Apellido(s) del usuario
+        age:
+          type: Number
+          description: Edad del usuario al registrarse
+        email:
+          type: String
+          description: Email único del usuario.
+        password:
+          type: String
+          description: Contraseña del usuario sin hashear
+      example:
+        name: Maria Victoria
+        lastName: Hernandez
+        age: 46
+        email: ejemplocorreo@gmail.com
+        password: contraseña43
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de mongo
+        name:
+          type: String
+          description: Nombre(s) del usuario
+        lastName:
+          type: String
+          description: Apellido(s) del usuario
+        age:
+          type: Number
+          description: Edad del usuario al registrarse
+        email:
+          type: String
+          description: Correo del usuario, este campo es único
+        password:
+          type: String
+          description: Contraseña Hasheada del usuario.
+      example:
+        _id: ObjectId("9e54s6d5g4sgjhj")
+        name: Agustin
+        lastName: Morales
+        age: 32
+        email: agustinmorales@gmail.com
+        password: 1231ascxz33fdqfmased
+paths:
+  /users:
+    get:
+      summary: Obtiene todos los usuarios de la base de datos
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Los usuarios se obtuvieron correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/createOne:
+    post:
+      summary: Crea un nuevo usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/nuevoUsuario"
+      responses:
+        "200":
+          description: "El usuario se creó correctamente"
+        "400":
+          description: "El usuario ya existía en la base de datos o se enviaron campos incompletos"
+        "500":
+          description: "Error interno de inserción a la base de datos"

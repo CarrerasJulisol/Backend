@@ -1,12 +1,14 @@
-import UserRepository from "../services/userRepostory.js";
+import { usersService } from "../services/services.js";
 import { UserDTO } from "../dao/dto/user.dto.js";
 
-const service = new UserRepository()
 
 const viewUsers = async (req,res) =>{
-    await service.init()
-    const result = await service.getUsers()
-    const users = result.map(user=>new UserDTO(user));
+    const result = await usersService.get()
+    const users = []
+    result.forEach(user => {
+        const u = new UserDTO(user)
+        return users.push(u)
+    });
     res.render("users",{
         users
     })
@@ -21,7 +23,7 @@ const createUser = async (req,res) =>{
             age,
             email
         }
-        const user = await service.saveUser(data)
+        await usersService.saveOne(data)
         res.send({message: "usuario creado"})
     } catch (error) {
         res.send(error)
@@ -32,5 +34,4 @@ export default {
     viewUsers,
     createUser
 }
-//Persistence.users.getUsers();
 

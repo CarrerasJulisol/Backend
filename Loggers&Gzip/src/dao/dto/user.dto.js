@@ -5,6 +5,6 @@ export class UserDTO {
         this.fullName = `${this.name} ${this.lastName}`;
         this.email = user.email;
         this.age = user.age;
-        this.role = user.role;
+        this.role = user.role||"usuario";
     }
 }

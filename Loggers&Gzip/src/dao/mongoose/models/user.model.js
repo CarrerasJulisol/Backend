@@ -5,7 +5,7 @@ export default class User {
     static get schema(){
         return {
             name:String,
-            lasName:String,
+            lastName:String,
             age:Number,
             email:String
         }

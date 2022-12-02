@@ -1,27 +1,17 @@
 import dotenv from 'dotenv';
-import minimist from "minimist";
 import __dirname from '../utils.js';
 
-const {
-    MODE,
-    PORT,
-    _
-} = minimist(process.argv.slice(2),{alias:{m:"MODE",p:"PORT"},default:{m:'FORK',p:8080}})
-
 const mode = process.argv.slice(2)[0];
-
-console.log(mode);
-
 dotenv.config({
-    path:mode==="FORK"?__dirname+'/.ecosystem.config':__dirname+'/.env.production'
+    path:mode==="PROD"?__dirname+'/.env.production':__dirname+'/.env.development'
 });
 
 export default {
     app:{
-        MODE:process.env.MODE || 'FORK',
-        PORT:process.env.PORT || 8080,
+        MODE:process.env.MODE || 'PROD',
+        PORT:process.env.PORT,
         DEBUG:process.env.DEBUG || false,
-        PERSISTENCE:process.env.PERSISTENCE || "MEMORY"
+        PERSISTENCE:process.env.PERSISTENCE
     },
     mongo:{
         USER:process.env.MONGO_USER,

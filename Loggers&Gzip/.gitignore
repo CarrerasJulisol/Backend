@@ -4,3 +4,5 @@ profiling.log
 conf
 .vscode
 images
+.env.development
+.env.production

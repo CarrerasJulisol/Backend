@@ -1,0 +1,17 @@
+<h1>Todos los productos</h1>
+<% if (products.length>0) { %>
+    <div>
+        <% products.forEach(product => { %>
+            <ul style="list-style:none;width: 100px;background-color: aliceblue;margin: 5px;">
+                <li>Producto: <%= product.name %></li>
+                <li><img src= <%= product.image %> alt="imagen default" style="width:50px"></li>
+                <li>$ <%= product.price %></li>
+                <li>Stock: <%= product.stock %></li>
+            </ul>  
+        <% }) %>
+    </div>
+<% } else { %>
+     <div>
+        "Aún no hay productos"
+     </div>
+<% } %>

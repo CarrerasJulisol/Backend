@@ -5,7 +5,7 @@ import config from "../../config/config.js";
 
 export default class MongooseDao {
     constructor(){
-        mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PWD}@proyecto-carreras.appkwcp.mongodb.net/${config.mongo.DB}`)
+        mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PWD}@proyecto-carreras.appkwcp.mongodb.net/${config.mongo.DB}?retryWrites=true&w=majority`)
         const userSchema = mongoose.Schema(User.schema);
         const productSchema = mongoose.Schema(Product.schema);
         this.models = {

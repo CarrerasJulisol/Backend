@@ -1,0 +1,80 @@
+components:
+  requestBodies:
+    nuevoProducto:
+      type: Object
+      properties:
+        name:
+          type: String
+          description: Nombre del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Disponibilidad del producto
+        image:
+          type: String
+          description: URl de la imagen del producto
+      example:
+        name: Bombilla para mate
+        price: 2500
+        stock: 46
+        image: https://i.ibb.co/KWGnKd9/imagen.png
+  schemas:
+    Product:
+      type: object
+      propierties:
+        _id:
+          type: ObjectId
+          description: ID generado por mongo
+        name:
+          type: String
+          description: Nombre del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Disponibilidad del producto
+        image:
+          type: String
+          description: URL de la imagen del producto
+      example:
+        _id: ObjectId("9fgdfgh54s9j")
+        name: Mantel morado
+        price: 1580
+        stock: 7
+        image: https://i.ibb.co/KWGnKd9/imagen.png
+paths:
+  /products:
+    get:
+      summary: Obtiene todos los productos de la base de datos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos se obtuvieron correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/createOne:
+    post:
+      summary: Crea un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/nuevoProducto"
+      responses:
+        "200":
+          description: "El producto se creó correctamente"
+        "400":
+          description: "El producto ya existía en la base de datos o se enviaron campos incompletos"
+        "500":
+          description: "Error interno de inserción a la base de datos"
